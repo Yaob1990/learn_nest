@@ -1,17 +1,27 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { NewsService } from './news/news.service';
-import { NewsController } from './news/news.controller';
-import { ArticleController } from './article/article.controller';
-import { ArticleService } from './article/article.service';
-import { UserController } from './user/user.controller';
-import { UserService } from './user/user.service';
-import { UploadController } from './upload/upload.controller';
+import { NewsService } from './controller/news/news.service';
+import { NewsController } from './controller/news/news.controller';
+import { ArticleController } from './controller/article/article.controller';
+import { ArticleService } from './controller/article/article.service';
+import { UserController } from './controller/user/user.controller';
+import { UserService } from './controller/user/user.service';
+import { InitMiddleware } from './middleware/init.middleware';
 
 @Module({
   imports: [],
-  controllers: [AppController, NewsController, ArticleController, UserController, UploadController],
+  controllers: [
+    AppController,
+    NewsController,
+    ArticleController,
+    UserController,
+  ],
   providers: [AppService, NewsService, ArticleService, UserService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  // 配置中间件
+  configure(consumer: MiddlewareConsumer): any {
+    consumer.apply(InitMiddleware).forRoutes('*');
+  }
+}

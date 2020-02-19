@@ -1,36 +1,43 @@
-## 文件上传
+## 中间件
 
-1. 设置表单 `enctype="multipart/form-data"`
+### 0. 执行时机：中间件是在路由处理程序 **之前** 调用的函数
+![中间件](./images/Middlewares_1.png)
 
-### 单文件上传(@UploadedFile)
+### 1. 创建中间件
+```javascript
+nest g middleware init
+```
+### 2. 配置中间件
+1. 多个中间件 `consumer.apply().forRoutes.apply().forRoutes()`
 
 ```javascript
-import { Controller, Get, Render, Post,UseInterceptors,UploadedFile} from '@nestjs/common';
-import { FileInterceptor,FilesInterceptor } from '@nestjs/platform-express';
-@Post('doAdd')
-@UseInterceptors(FileInterceptor('pic'))
-addUser(@UploadedFile() file,@Body() body){
-console.log(body);
-console.log(file);
-const writeImage = createWriteStream(join(__dirname, '..','../public/upload', `${file.originalname}`))
-writeImage.write(file.buffer)
-return '上传成功';
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(InitMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL })
+      .apply(NewsMiddleware).
+      forRoutes({ path: 'news', method: RequestMethod.ALL })
+      .apply(UserMiddleware).
+      forRoutes({ path: 'user', method: RequestMethod.GET }, {
+        path: '', method:
+          RequestMethod.GET
+      });
+  }
 }
 ```
 
-### 多文件上传(@UploadedFiles)
-
+### 3. 函数式中间件
 ```javascript
-import { Controller, Get, Render, Post,UseInterceptors,UploadedFiles} from '@nestjs/common';
-import { FileInterceptor,FilesInterceptor } from '@nestjs/platform-express';
-@Post('doAddAll')
-@UseInterceptors(FilesInterceptor('pic'))
-addAllUser(@UploadedFiles() files,@Body() body){
-for (const file of files) {
-const writeImage =
-createWriteStream(join(__dirname, '../../', 'public/upload', `${body.name}-${Date.now()}-${file.originalname}`));
-writeImage.write(file.buffer);
-}
-return '上传成功';
-}
+export function logger(req, res, next) {
+  console.log(`Request...`);
+  next();
+};
+```
+
+### 4. 全局中间件(只能是函数式中间件)
+```javascript
+const app = await NestFactory.create(ApplicationModule);
+app.use(logger);
+await app.listen(3000);
 ```
