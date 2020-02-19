@@ -2,7 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { join } from 'path';
-import * as cookieParser from 'cookie-parser'
+import * as cookieParser from 'cookie-parser';
+import * as session from 'express-session';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -16,6 +17,8 @@ async function bootstrap() {
 
   //配置 cookie 中间件
   app.use(cookieParser('123'));
+  // 配置 session 中间件
+  app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 } }));
   await app.listen(3000);
 }
 bootstrap();
