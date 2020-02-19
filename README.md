@@ -1,23 +1,36 @@
-## 设置 cookie
+## 文件上传
 
-### 1.安装 express-session
+1. 设置表单 `enctype="multipart/form-data"`
+
+### 单文件上传(@UploadedFile)
 
 ```javascript
-cnpm install express-session --save
+import { Controller, Get, Render, Post,UseInterceptors,UploadedFile} from '@nestjs/common';
+import { FileInterceptor,FilesInterceptor } from '@nestjs/platform-express';
+@Post('doAdd')
+@UseInterceptors(FileInterceptor('pic'))
+addUser(@UploadedFile() file,@Body() body){
+console.log(body);
+console.log(file);
+const writeImage = createWriteStream(join(__dirname, '..','../public/upload', `${file.originalname}`))
+writeImage.write(file.buffer)
+return '上传成功';
+}
 ```
 
-### 2.在 main.js 中引入`express-session`,配置中间件
+### 多文件上传(@UploadedFiles)
 
 ```javascript
-import * as session from 'express-session';
-app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 } }));
-```
-
-### 3.使用
-
-```javascript
-// 设置
-req.session.username = '张三';
-// 获取
-req.session.username;
+import { Controller, Get, Render, Post,UseInterceptors,UploadedFiles} from '@nestjs/common';
+import { FileInterceptor,FilesInterceptor } from '@nestjs/platform-express';
+@Post('doAddAll')
+@UseInterceptors(FilesInterceptor('pic'))
+addAllUser(@UploadedFiles() files,@Body() body){
+for (const file of files) {
+const writeImage =
+createWriteStream(join(__dirname, '../../', 'public/upload', `${body.name}-${Date.now()}-${file.originalname}`));
+writeImage.write(file.buffer);
+}
+return '上传成功';
+}
 ```

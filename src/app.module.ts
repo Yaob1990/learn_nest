@@ -7,10 +7,11 @@ import { ArticleController } from './article/article.controller';
 import { ArticleService } from './article/article.service';
 import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
+import { UploadController } from './upload/upload.controller';
 
 @Module({
   imports: [],
-  controllers: [AppController, NewsController, ArticleController, UserController],
+  controllers: [AppController, NewsController, ArticleController, UserController, UploadController],
   providers: [AppService, NewsService, ArticleService, UserService],
 })
 export class AppModule {}
