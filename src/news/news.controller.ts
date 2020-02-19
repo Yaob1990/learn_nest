@@ -8,6 +8,7 @@ export class NewsController {
   @Get()
   @Render('default/news')
   index(){
+
     return this.newsService.findAll()
   }
 }
