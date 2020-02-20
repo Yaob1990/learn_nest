@@ -1,43 +1,44 @@
-## 中间件
+### 管道
 
-### 0. 执行时机：中间件是在路由处理程序 **之前** 调用的函数
-![中间件](./images/Middlewares_1.png)
+处理数据（加工），验证数据是否符合要求
 
-### 1. 创建中间件
+### 1. 创建管道
+
 ```javascript
-nest g middleware init
+nest g pipe user
 ```
-### 2. 配置中间件
-1. 多个中间件 `consumer.apply().forRoutes.apply().forRoutes()`
-
 ```javascript
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(InitMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.ALL })
-      .apply(NewsMiddleware).
-      forRoutes({ path: 'news', method: RequestMethod.ALL })
-      .apply(UserMiddleware).
-      forRoutes({ path: 'user', method: RequestMethod.GET }, {
-        path: '', method:
-          RequestMethod.GET
-      });
+@Injectable()
+export class NewsPipe implements PipeTransform {
+  transform(value: any, metadata: ArgumentMetadata) {
+    console.log(value); // Get 或者Post传过来的值
+    console.log('-------我是管道------');
+    value.id = '666666';
+
+    return value;
   }
 }
 ```
 
-### 3. 函数式中间件
+### 2. 使用管道
+
 ```javascript
-export function logger(req, res, next) {
-  console.log(`Request...`);
-  next();
-};
+import { Controller, Get, UsePipes, Query } from '@nestjs/common';
+import { UserPipe } from '../../user.pipe';
+@Controller('user')
+export class UserController {
+  @Get()
+  index() {
+    return '用户页面';
+  }
+  @Get('pipe')
+  @UsePipes(new UserPipe())
+  pipe(@Query() info) {
+    console.log(info);
+    return `this is Pipe`;
+  }
+}
 ```
 
-### 4. 全局中间件(只能是函数式中间件)
-```javascript
-const app = await NestFactory.create(ApplicationModule);
-app.use(logger);
-await app.listen(3000);
-```
+### 3. 可以结合 joi 库进行数据验证，通过返回true，否则，返回 false
+Joi 库： https://github.com/hapijs/joi
