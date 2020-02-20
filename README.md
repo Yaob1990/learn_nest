@@ -1,20 +1,46 @@
-# 模块
-### 模块定义
+# 守卫
+和vue的路由守卫其实类似，使用时候都是返回Boolean值，确定是否通过守卫验证。
 
-模块是具有@Module() 装饰器的类。@Module() 装饰器提供了元数据，Nest 用它来组织应用程序结构。
 
-### 模块共享
+### 创建守卫
+```shell script
+nest g guard auth
+```
 
-实际上，每个模块都是一个共享模块。一旦创建就能被任意模块重复使用。假设我们将在几个模块之间共享CatsService 实例。我们需要把CatsService 放到exports 数组中，如下所示：
-
+### 使用守卫
+1. 控制器使用
 ```javascript
-import { Module } from '@nestjs/common';
-import { CatsController } from './cats.controller';
-import { CatsService } from './cats.service';
-@Module({
-  controllers: [CatsController],
-  providers: [CatsService],
-  exports: [CatsService] // 共享
-})
-export class CatsModule { }
+@Controller('cats')
+@UseGuards(RolesGuard)
+export class CatsController {}
+```
+
+2. 路由使用
+```javascript
+@Get('guard')
+@UseGuards(AuthGuard)
+guard(@Query() info) {
+  console.log(info);
+  return `this is guard`;
+}
+```
+
+3. 全局使用
+```javascript
+app.useGlobalGuards(new AuthGuard());
+```
+### 获取 cookie 和 session
+```javascript
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { Observable } from 'rxjs';
+@Injectable()
+export class AuthGuard implements CanActivate {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    console.log(context.switchToHttp().getRequest().cookies);
+    console.log(context.switchToHttp().getRequest().session);
+    return true;
+  }
+}
 ```
