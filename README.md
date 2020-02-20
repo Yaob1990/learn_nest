@@ -1,44 +1,20 @@
-### 管道
+# 模块
+### 模块定义
 
-处理数据（加工），验证数据是否符合要求
+模块是具有@Module() 装饰器的类。@Module() 装饰器提供了元数据，Nest 用它来组织应用程序结构。
 
-### 1. 创建管道
+### 模块共享
 
-```javascript
-nest g pipe user
-```
-```javascript
-@Injectable()
-export class NewsPipe implements PipeTransform {
-  transform(value: any, metadata: ArgumentMetadata) {
-    console.log(value); // Get 或者Post传过来的值
-    console.log('-------我是管道------');
-    value.id = '666666';
-
-    return value;
-  }
-}
-```
-
-### 2. 使用管道
+实际上，每个模块都是一个共享模块。一旦创建就能被任意模块重复使用。假设我们将在几个模块之间共享CatsService 实例。我们需要把CatsService 放到exports 数组中，如下所示：
 
 ```javascript
-import { Controller, Get, UsePipes, Query } from '@nestjs/common';
-import { UserPipe } from '../../user.pipe';
-@Controller('user')
-export class UserController {
-  @Get()
-  index() {
-    return '用户页面';
-  }
-  @Get('pipe')
-  @UsePipes(new UserPipe())
-  pipe(@Query() info) {
-    console.log(info);
-    return `this is Pipe`;
-  }
-}
+import { Module } from '@nestjs/common';
+import { CatsController } from './cats.controller';
+import { CatsService } from './cats.service';
+@Module({
+  controllers: [CatsController],
+  providers: [CatsService],
+  exports: [CatsService] // 共享
+})
+export class CatsModule { }
 ```
-
-### 3. 可以结合 joi 库进行数据验证，通过返回true，否则，返回 false
-Joi 库： https://github.com/hapijs/joi
