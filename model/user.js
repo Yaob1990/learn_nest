@@ -1,7 +1,14 @@
 const mongoose = require('./db');
 
 const UserSchema = mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    uppercase: true,
+  },
+  sn: {
+    type: String,
+    index: true,
+  },
   age: Number,
   status: Number,
 });
