@@ -1,0 +1,52 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js
+
+PATH: 
+  E:\学习课程\nest\ls03\node_modules\.bin;C:\Python27\;C:\Python27\Scripts;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\ProgramData\chocolatey\bin;C:\Program Files\Java\jdk1.8.0_231\bin;D:\DevelopTool\Maven\apache-maven-3.6.3\bin;D:\Program\LxRunOffline;D:\DevelopTool\TortoiseSVN\bin;D:\DevelopTool\Git\cmd;C:\Program Files (x86)\Yarn\bin\;D:\DevelopTool\MongoDB\Server\4.2\bin;C:\Program Files\nodejs\;C:\Ruby27-x64\bin;D:\DevelopTool\Haskell Stack\bin;C:\Users\Yao\AppData\Local\Programs\Python\Python38\Scripts\;C:\Users\Yao\AppData\Local\Programs\Python\Python38\;C:\Users\Yao\AppData\Local\Programs\Python\Python38-32\Scripts\;C:\Users\Yao\AppData\Local\Programs\Python\Python38-32\;C:\Users\Yao\AppData\Local\Microsoft\WindowsApps;D:\DevelopTool\WebStorm\bin;;D:\DevelopTool\Microsoft VS Code\bin;D:\DevelopTool\PyCharm 2019.2.4\bin;;D:\DevelopTool\Android\SDK\platform-tools;D:\DevelopTool\IDEA\IntelliJ IDEA 2019.3.1\bin;;C:\Users\Yao\AppData\Local\Yarn\bin;C:\Users\Yao\AppData\Roaming\npm
+
+Yarn version: 
+  1.22.0
+
+Node version: 
+  12.16.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  SyntaxError: E:\学习课程\nest\ls03\package.json: Unexpected token } in JSON at position 488
+      at JSON.parse (<anonymous>)
+      at C:\Program Files (x86)\Yarn\lib\cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (C:\Program Files (x86)\Yarn\lib\cli.js:310:30)
+      at C:\Program Files (x86)\Yarn\lib\cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "ls03",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/Yaob1990/learn_nest.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/Yaob1990/learn_nest/issues"
+    },
+    "homepage": "https://github.com/Yaob1990/learn_nest#readme",
+    "dependencies": {
+      "mongoose": "^5.9.1",
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
